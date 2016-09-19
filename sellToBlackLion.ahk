@@ -190,29 +190,22 @@ getSellColor() {
   PixelGetColor, currentColor, pixelPosX, pixelPosY
   return %currentColor%
 }
-test() {
-  MSGbox,% notPosibolToSell()
-  if notPosibolToSell()
-    MSGbox, works
-    MSGbox, caca
-}
 
 notPosibolToSell() {
-  posibol := "false"
+  posibol := "true"
   validSellColor0 := 0xABBEC6
   validSellColor1 := 0xAFBCC8
   if (validSellColor0 == getSellColor()) {
-      posibol := "true"
+      posibol := "false"
   }
   if (validSellColor1 == getSellColor()) {
-      posibol := "true"
+      posibol := "false"
   }
   return posibol
 }
 
 sellRepetitively() {
   quantity := promptForQuant()
-
   itemsToSkip := 0 ; contador de cosas que no he podido vender.
   while (quantity > 0) {
       waitAbout(300)

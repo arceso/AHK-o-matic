@@ -3,7 +3,7 @@
 #Include gameFuncs.ahk
 #Include miscFuncs.ahk
 #Include sellToBlackLion.ahk
-
+DetectHiddenWindows, On
 CoordMode, Mouse, Screen
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
@@ -12,5 +12,4 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ^!o::doAllTheThing()
 ^o::sellRepetitively()
 ^!p::showMouseCoordinates()
-
-^t::test()
+^!c::getColorAtCursor()

@@ -29,3 +29,9 @@ getColorAt(x, y) {
   PixelGetColor, hexColor, x, y
   return, hexColor
 }
+
+getColorAtCursor(){
+    MouseGetPos, xpos, ypos
+    PixelGetColor, hexColor, xpos, ypos
+    MSGBox, Color: %hexColor%
+}
