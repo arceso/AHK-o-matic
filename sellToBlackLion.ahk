@@ -16,8 +16,10 @@ doAllTheThing() {
   selectSellTab()
   waitAbout(30)
   selectSearchBox()
+  waitAbout(30)
+  selectAll()
   waitAbout(100)
-  typeOnBox("minor")
+  typeOnBox("major")
   waitAbout(30)
   holdKey("Tab", 30)
   waitAbout(30)
@@ -130,6 +132,24 @@ confirmConfirmation() {
   calcBoxPosMoveAndClick(boxSizeX, boxSizeY, boxPositionX, boxPositionY)
 }
 
+clickOnGold() {
+  boxSizeX := 30
+  boxSizeY := 10
+  boxPositionX := 337
+  boxPositionY := 244
+
+  calcBoxPosMoveAndClick(boxSizeX, boxSizeY, boxPositionX, boxPositionY)
+}
+
+changeToSellTab() {
+  boxSizeX := 150
+  boxSizeY := 80
+  boxPositionX := 150
+  boxPositionY := 120
+
+  calcBoxPosMoveAndClick(boxSizeX, boxSizeY, boxPositionX, boxPositionY)
+}
+
 typeOnBox(text) {
   type(text)
 }
@@ -149,15 +169,6 @@ promptForQuant() {
       repeat := false
   }
   return quant
-}
-
-changeToSellTab() {
-  boxSizeX := 150
-  boxSizeY := 80
-  boxPositionX := 150
-  boxPositionY := 120
-
-  calcBoxPosMoveAndClick(boxSizeX, boxSizeY, boxPositionX, boxPositionY)
 }
 
 ; Misc
@@ -182,29 +193,8 @@ setBLWindowPos(posX, posY) {
   usablePositionY :=  posY
 }
 
-getSellColor() {
-  global usablePositionX
-  global usablePositionY
-  pixelPosX := 328 + usablePositionX
-  pixelPosY := 329 + usablePositionY
-  PixelGetColor, currentColor, pixelPosX, pixelPosY
-  return %currentColor%
-}
-
-notPosibolToSell() {
-  posibol := "true"
-  validSellColor0 := 0xABBEC6
-  validSellColor1 := 0xAFBCC8
-  if (validSellColor0 == getSellColor()) {
-      posibol := "false"
-  }
-  if (validSellColor1 == getSellColor()) {
-      posibol := "false"
-  }
-  return posibol
-}
-
 sellRepetitively() {
+  itemPrice := 108
   quantity := promptForQuant()
   itemsToSkip := 0 ; contador de cosas que no he podido vender.
   while (quantity > 0) {
@@ -215,7 +205,7 @@ sellRepetitively() {
       waitAbout(300)
     undercut()
       waitAbout(300)
-    if notPosibolToSell()
+    if priceIsTooLow(getPrice(), itemPrice)
       uppercut()
       waitAbout(300)
     hitTheSellButton()
@@ -223,4 +213,33 @@ sellRepetitively() {
     confirmConfirmation()
     quantity := quantity - 1
   }
+}
+
+priceIsTooLow(sellPrice, vendorPrice) {
+  listingFee := sellPrice * 0.05
+  exchangeFee := sellPrice * 0.1
+  totalFees := listingFee + exchangeFee
+  is := sellPrice - totalFees <= vendorPrice ? true : false
+  return is
+}
+
+getPrice() {
+  clickOnGold()
+  waitAbout(15)
+  click
+  waitAbout(15)
+  copy()
+  waitAbout(15)
+  gold = %Clipboard%
+  sendTab()
+  waitAbout(15)
+  copy()
+  waitAbout(15)
+  silver = %Clipboard%
+  sendTab()
+  waitAbout(15)
+  copy()
+  waitAbout(15)
+  cooper = %Clipboard%
+  return (gold*10000 + silver*100 + cooper)
 }

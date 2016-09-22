@@ -9,7 +9,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ^esc::ExitApp
 ^r::Reload
+^p::pause
 ^!o::doAllTheThing()
 ^o::sellRepetitively()
 ^!p::showMouseCoordinates()
-^!c::getColorAtCursor()

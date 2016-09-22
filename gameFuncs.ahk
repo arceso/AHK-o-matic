@@ -16,6 +16,7 @@ moveAndClickOnBox(x0, y0, x1, y1) {
   rndX := rnd(x0, x1)
   rndY := rnd(y0, y1)
   moveMouse(rndX, rndY)
+  waitAbout(20)
   click
 }
 
@@ -33,11 +34,11 @@ holdKey(key, duration) {
 
 holdTwoKeys(key1, key2, duration) {
   Send, {%key1% down}
-  waitAbout(15)
+  waitAbout(100)
   Send, {%key2% down}
   waitAbout(duration)
   Send, {%key1% up}
-  waitAbout(15)
+  waitAbout(100)
   Send, {%key2% up}
 }
 

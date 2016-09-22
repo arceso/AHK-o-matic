@@ -1,4 +1,3 @@
-
 rnd(min, max) {
     random, num, %min% , %max%
     return num
@@ -34,4 +33,22 @@ getColorAtCursor(){
     MouseGetPos, xpos, ypos
     PixelGetColor, hexColor, xpos, ypos
     MSGBox, Color: %hexColor%
+}
+
+selectAll() {
+  Send, {Ctrl Down}a
+  waitAbout(15)
+  Send,{Ctrl Up}
+  ClipWait
+}
+
+copy() {
+  Send, {Ctrl Down}c
+  waitAbout(15)
+  Send,{Ctrl Up}
+  ClipWait
+}
+
+sendTab() {
+  holdKey("Tab", 10)
 }
