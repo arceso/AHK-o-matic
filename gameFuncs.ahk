@@ -90,6 +90,6 @@ type(text)  { ; No lee espacios, se los come, si quieres eso, implementa " " -> 
     StringTrimRight, char, text, % StrLen(text) - 1
     StringTrimLeft, text, text, 1
     rndHoldKey(char, 10)
-    waitAbout(5)
+    waitAbout(8)
   }
 }

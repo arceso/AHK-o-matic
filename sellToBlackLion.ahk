@@ -18,7 +18,7 @@ doAllTheThing() {
   selectSearchBox()
   waitAbout(30)
   selectAll()
-  waitAbout(100)
+  waitAbout(200)
   typeOnBox("major")
   waitAbout(30)
   holdKey("Tab", 30)
@@ -205,8 +205,9 @@ sellRepetitively() {
       waitAbout(300)
     undercut()
       waitAbout(300)
-    if priceIsTooLow(getPrice(), itemPrice)
+    if (priceIsTooLow(getPrice(), itemPrice) == "true") {
       uppercut()
+    }
       waitAbout(300)
     hitTheSellButton()
       waitAbout(300)
@@ -219,7 +220,7 @@ priceIsTooLow(sellPrice, vendorPrice) {
   listingFee := sellPrice * 0.05
   exchangeFee := sellPrice * 0.1
   totalFees := listingFee + exchangeFee
-  is := sellPrice - totalFees <= vendorPrice ? true : false
+  is := sellPrice - totalFees <= vendorPrice ? "true" : "false"
   return is
 }
 
