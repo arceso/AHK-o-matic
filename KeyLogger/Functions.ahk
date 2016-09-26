@@ -16,37 +16,47 @@ keylogger(char, file) {
 }
 
 formater(fileName) {
-  msgbox, Main Func Started
+  fileTimeStart := getLineAt(fileName, 1)
+  fileSize := getFileSize(fileName)
+  fileArray := fileToArray(fileName, fileTimeStart, fileSize)
+  writeToFile(orderByStartTime(setRelativeTimes(interlaceEvents(fileArray))))
+}
+
+fileToArray(fileName, fileTimeStart, fileSize) {
   recordedLines := Object()
   everyEventPaired := Object()
-  fileTimeStart := getLineAt(fileName, 1)
   recordedLines.Push(getLineAt(fileName, 1))
-  fileSize := getFileSize(fileName)
-  lineCount := 0
-  Loop, Read, %fileName%
-  {
-    for index, line in recordedLines {
-      relation := relationType(A_LoopReadLine, line)
+  file := FileOpen(fileName, "r")
+  while(! file.AtEOF) {
+    line := file.ReadLine()
+    newFound := false
+    compFound := false
+    sameFound := false
+    tmpIndex := 0
+    for index, recline in recordedLines {
+      relation := relationType(line, recline)
       if (relation = "new") {
-        recordedLines.Push(A_LoopReadLine)
+        newFound := true
       } else if (relation = "complementary") {
-        everyEventPaired.Push(getLine(recordedLines[index] ,A_LoopReadLine, fileTimeStart))
-        recordedLines.RemoveAt(index)
-        if (recordedLines.Length() = 0) and (lineCount < fileSize) {
-          recordedLines.Push(getLineAt(fileName, lineCount+2))
-        }
+        compFound := true
+        tmpIndex := index
       } else if (relation = "same") {
+        sameFound := true
       }
+    }
+    if (sameFound){
+    }else if (compFound) {
+      everyEventPaired.Push(getLine(recordedLines[index] ,line, fileTimeStart))
+      recordedLines.RemoveAt(index)
+      if (recordedLines.Length() = 0) and (lineCount < fileSize) {
+        recordedLines.Push(getLineAt(fileName, lineCount+2))
+      }
+    }else if (newFound) {
+      recordedLines.Push(line)
     }
     lineCount ++
   }
-    msgbox, Main Func Ended
-    msgbox, formatting Func started
-  interlacedArray := orderByStartTime(setRelativeTimes(interlaceEvents((everyEventPaired))))
-    msgbox, formatting Func Ended
-    msgbox, writing started
-  writeToFile(interlacedArray)
-    msgbox, writing Ended
+  return everyEventPaired
 }
 
 getLine(recordedLine, currentLine, fileTimeStart) {
