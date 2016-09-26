@@ -4,7 +4,7 @@ rnd(min, max) {
 }
 
 about(number) {
-  variation := number*.08
+  variation := number*.02
   rndDur := rnd(number-variation, number+variation)
   return rndDur
 }
@@ -39,7 +39,6 @@ selectAll() {
   Send, {Ctrl Down}a
   waitAbout(15)
   Send,{Ctrl Up}
-  ClipWait
 }
 
 copy() {
@@ -50,5 +49,7 @@ copy() {
 }
 
 sendTab() {
-  holdKey("Tab", 10)
+  Send, {Tab Down}
+  waitAbout(15)
+  Send,{Tab Up}
 }

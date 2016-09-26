@@ -16,6 +16,7 @@ keylogger(char, file) {
 }
 
 formater(fileName) {
+  msgbox, Main Func Started
   recordedLines := Object()
   everyEventPaired := Object()
   fileTimeStart := getLineAt(fileName, 1)
@@ -29,7 +30,7 @@ formater(fileName) {
       if (relation = "new") {
         recordedLines.Push(A_LoopReadLine)
       } else if (relation = "complementary") {
-        everyEventPaired.Push(getLine(recordedLines[index] ,A_LoopReadLine, fileTimeStart, fileName))
+        everyEventPaired.Push(getLine(recordedLines[index] ,A_LoopReadLine, fileTimeStart))
         recordedLines.RemoveAt(index)
         if (recordedLines.Length() = 0) and (lineCount < fileSize) {
           recordedLines.Push(getLineAt(fileName, lineCount+2))
@@ -39,17 +40,22 @@ formater(fileName) {
     }
     lineCount ++
   }
-
-  interlacedArray := interlaceEvents(orderByStartTime(setRelativeTimes(everyEventPaired)))
-  printArr(interlacedArray, "Interlaced")
+    msgbox, Main Func Ended
+    msgbox, formatting Func started
+  interlacedArray := orderByStartTime(setRelativeTimes(interlaceEvents((everyEventPaired))))
+    msgbox, formatting Func Ended
+    msgbox, writing started
   writeToFile(interlacedArray)
+    msgbox, writing Ended
 }
 
-getLine(recordedLine, currentLine, fileTimeStart, fileName) {
-  start := calcTime(currentLine, fileTimeStart)
+getLine(recordedLine, currentLine, fileTimeStart) {
+  totalTime := calcTime(currentLine, fileTimeStart)
   duration := calcTime(currentLine, recordedLine)
+  start := totalTime - duration
   key := getKey(currentLine)
-  return {start: start, duration: duration, key: key}
+  lineObject := {start: start, duration: duration, key: key}
+  return lineObject
 }
 
 calcTime(firstLine, secondLine) {
@@ -115,10 +121,12 @@ getFileSize(fileName) {
 }
 
 setRelativeTimes(array) {
-  baseTime := array[1].start
+  previousTime := array[1].time
+  tmpPrevTime := 0
   for index, event in array {
-    array[index].start := event.start - baseTime
-    a:=array[index].start
+    tmpPrevTime := array[index].time
+    array[index].time := event.time - previousTime
+    previousTime := tmpPrevTime
   }
   return array
 }
@@ -128,12 +136,11 @@ interlaceEvents(rawArray) {
   startHasBeenPut := false
   endHasBeenPut := false
   formatedArray := Object()
-  printArr(rawArray, "Raw Array")
   for rawIndex, rawEvent in rawArray {
     bestStartTimePos := -1
     bestEndTimePos := -1
     for formIndex, formEvent in formatedArray {
-      if (rawEvent.start < formEvent.time){
+      if (rawEvent.start < formEvent.time) {
         bestStartTimePos := formIndex
       }
       if (rawEvent.start + rawEvent.duration < formEvent.time) {
@@ -179,7 +186,6 @@ orderByStartTime(rawArray) {
 writeToFile(array) {
   fileName := promptForFileName()
   initFile(fileName)
-  array := relativiceTime(array)
   for index, event in array {
     inserWait(event.time, fileName)
     if (event.state = "pressed") {
@@ -258,6 +264,20 @@ printArr(array, name) {
     msgbox, time: %time%
     state := line.state
     msgbox, state: %state%
+    key := line.key
+    msgbox, key: %key%
+  }
+  msgbox, End of %name%.
+}
+
+printArrAlt(array, name) {
+  msgbox, %name%:
+  for index, line in array {
+    msgbox, Index: %index%
+    start := line.start
+    msgbox, start: %start%
+    duration := line.duration
+    msgbox, duration: %duration%
     key := line.key
     msgbox, key: %key%
   }
